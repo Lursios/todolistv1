@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = 3000;
 var items = ["Going to gym", "finish course for website"];
+let workItems = [];
 // App that's going to be used --Opening
 // app.use(express.static("public")); 
 app.use(bodyParser.urlencoded({extended:true}));
@@ -26,9 +27,12 @@ app.get("/", function(req, res ){
     }; 
     // res.sendFile(__dirname+"/index.html");
     // res.render("list2", {day:day , typeOfDay:typeOfDay,items:items});
-    res.render("list", {day:day, typeOfDay,items:items});
+    res.render("list", {listTitle:day, typeOfDay,items:items});
 });
 
+app.get("/work", function(req, res) {
+    res.render("list",{listTitle:"Work List", items: workItems});
+});
 // get requests -- Closing
 
 // post requests -- Opening
@@ -37,6 +41,11 @@ app.post("/", function(req, res) {
     items.push(newItem);
     res.redirect("/");
 });
+
+app.post("/work", function(req, res) {
+    workItems.push(req.body.itemName);
+    res.redirect("/work");
+})
 
 app.listen(port,function(){
     console.log(`Listening to port ${port}`);
